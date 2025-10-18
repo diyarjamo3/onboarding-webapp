@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Security Onboarding</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lesson-title {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .quiz-container {
+            background: white;
+        }
+
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-question:hover {
+            border-color: #667eea;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .quiz-option {
+            background: white;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .quiz-option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .quiz-option.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .explanation {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 1.5em;
+        }
+
+        .link-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .link-card a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .content-card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .tab-btn {
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 Information Security Onboarding</h1>
+            <p class="subtitle">Rotterdam Academy - Welkom in de wereld van digitale veiligheid</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('intro', event)">Introductie</button>
+            <button class="tab-btn" onclick="showTab('les1', event)">Les 1</button>
+            <button class="tab-btn" onclick="showTab('les2', event)">Les 2</button>
+            <button class="tab-btn" onclick="showTab('les3', event)">Les 3</button>
+            <button class="tab-btn" onclick="showTab('les4', event)">Les 4</button>
+            <button class="tab-btn" onclick="showTab('les5', event)">Les 5</button>
+            <button class="tab-btn" onclick="showTab('quiz', event)">Quiz</button>
+        </div>
+
+        <div id="intro" class="content-card active">
+            <h2 class="lesson-title">🎓 Welkom bij Information Security</h2>
+            <div class="info-box">
+                <p><strong>Deze onboarding helpt jou om goed te starten in de wereld van digitale veiligheid.</strong></p>
+                <p>Je leert stap voor stap hoe je verantwoord met informatie, systemen en privacy omgaat — de basis van jouw vakgebied.</p>
+            </div>
+            <div class="section">
+                <h3 class="section-title">📚 Wat ga je leren?</h3>
+                <ul>
+                    <li><strong>Les 1:</strong> Informatievaardigheden in Information Security</li>
+                    <li><strong>Les 2:</strong> De weg binnen de Hogeschool</li>
+                    <li><strong>Les 3:</strong> Feedbackgeletterdheid in een Security-team</li>
+                    <li><strong>Les 4:</strong> Privacy, AVG en Data Protection</li>
+                    <li><strong>Les 5:</strong> NIS2, GDPR & Cyber Awareness</li>
+                    <li><strong>Quiz:</strong> Test je kennis met 10 vragen</li>
+                </ul>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button class="nav-button" onclick="showTab('les1', event)">Volgende →</button>
+            </div>
+        </div>
+
+        <div id="les1" class="content-card">
+            <h2 class="lesson-title">🧭 Les 1 – Informatievaardigheden in Information Security</h2>
+            
+            <div class="section">
+                <h3 class="section-title">🎯 Leerdoelen</h3>
+                <ul>
+                    <li>Weten hoe je betrouwbare bronnen over information security vindt</li>
+                    <li>Informatie kunnen beoordelen met de CRAAP-methode</li>
+                    <li>Correct verwijzen volgens APA-richtlijnen</li>
+                    <li>Ethisch omgaan met AI en open bronnen</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>💡 Toelichting</h4>
+                <p>In information security is informatie net zo belangrijk als techniek. Goede informatievaardigheden helpen je om actuele dreigingen, nieuwe wetgeving of beveiligingsstandaarden te begrijpen.</p>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🔍 Waar zoeken?</h3>
+                <ul>
+                    <li>Mediatheek HR (voor vakliteratuur en ISO-documenten)</li>
+                    <li>Google Scholar of IEEE Xplore</li>
+                    <li>NCSC.nl en Security.nl voor actuele cybernieuws</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">📊 CRAAP-methode</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Letter</th>
+                            <th>Vraag</th>
+                            <th>Toelichting</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>C</strong></td>
+                            <td>Currency</td>
+                            <td>Is het recent genoeg voor information security (minder dan 2 jaar)?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>R</strong></td>
+                            <td>Relevance</td>
+                            <td>Sluit het aan op jouw onderzoek of opdracht?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>A</strong></td>
+                            <td>Authority</td>
+                            <td>Is het van een erkende organisatie (bijv. NCSC, ENISA)?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>A</strong></td>
+                            <td>Accuracy</td>
+                            <td>Kloppen de feiten, bronnen, en cijfers?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P</strong></td>
+                            <td>Purpose</td>
+                            <td>Is het bedoeld om te informeren, of reclame te maken?</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="warning-box">
+                <h4>🤖 AI-verantwoordelijkheid</h4>
+                <p>AI-tools zoals ChatGPT of Copilot kunnen helpen bij samenvatten of brainstormen, maar:</p>
+                <ul>
+                    <li>Controleer altijd de bron van de informatie</li>
+                    <li>Gebruik geen vertrouwelijke data in prompts</li>
+                    <li>Vermeld AI-gebruik in je verslag</li>
+                </ul>
+                <p><strong>📘 APA-vermelding:</strong><br>
+                OpenAI. (2025). ChatGPT (GPT-5) [AI-model]. Geraadpleegd op 16 oktober 2025, van https://chat.openai.com</p>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🔗 Bronnen</h3>
+                <div class="link-card">
+                    <a href="#">APA-richtlijnen HR</a>
+                </div>
+                <div class="link-card">
+                    <a href="https://www.ncsc.nl" target="_blank">NCSC – Cybersecuritybeeld Nederland</a>
+                </div>
+                <div class="link-card">
+                    <a href="https://www.security.nl" target="_blank">Security.nl – Nieuws over digitale veiligheid</a>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showTab('intro', event)">← Vorige</button>
+                <button class="nav-button" onclick="showTab('les2', event)">Volgende →</button>
+            </div>
+        </div>
+
+        <div id="les2" class="content-card">
+            <h2 class="lesson-title">🏫 Les 2 – De Weg binnen de Hogeschool</h2>
+            
+            <div class="section">
+                <h3 class="section-title">🎯 Leerdoelen</h3>
+                <ul>
+                    <li>Kennismaken met digitale systemen van HR</li>
+                    <li>Weten waar je hulp en informatie vindt</li>
+                    <li>Basisregels voor veilig gebruik van onderwijs-ICT</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🧭 Platformen</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Functie</th>
+                            <th>Security-tip</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Brightspace</td>
+                            <td>Lesmateriaal en opdrachten</td>
+                            <td>Gebruik altijd sterke wachtwoorden, log uit bij gedeelde computers</td>
+                        </tr>
+                        <tr>
+                            <td>Hint.hr.nl</td>
+                            <td>Officiële informatie</td>
+                            <td>Alleen toegankelijk via HR-account</td>
+                        </tr>
+                        <tr>
+                            <td>MijnHR-app</td>
+                            <td>Rooster & meldingen</td>
+                            <td>Update de app regelmatig</td>
+                        </tr>
+                        <tr>
+                            <td>Studentzaken</td>
+                            <td>Administratie en DUO</td>
+                            <td>Gebruik alleen beveiligde netwerken</td>
+                        </tr>
+                        <tr>
+                            <td>Mediatheek</td>
+                            <td>Boeken & bronnen</td>
+                            <td>Check auteursrechten bij downloads</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box">
+                <h4>🔒 Securitygedrag binnen HR</h4>
+                <ul>
+                    <li>Deel nooit je wachtwoord of studenten-ID</li>
+                    <li>Gebruik MFA (Multi-Factor Authentication)</li>
+                    <li>Meld datalekken of verdachte mails via security@hr.nl</li>
+                    <li>Wees voorzichtig met USB-sticks en eigen laptops</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">⚖️ Rechten en plichten</h3>
+                <p>Volgens de OER (Onderwijs- en Examenreglement):</p>
+                <ul>
+                    <li>Recht op inzage in je werk</li>
+                    <li>Plicht tot eerlijk handelen (geen plagiaat of fraude)</li>
+                    <li>Verantwoordelijkheid voor correcte omgang met gegevens</li>
+                </ul>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showTab('les1', event)">← Vorige</button>
+                <button class="nav-button" onclick="showTab('les3', event)">Volgende →</button>
+            </div>
+        </div>
+
+        <div id="les3" class="content-card">
+            <h2 class="lesson-title">💬 Les 3 – Feedbackgeletterdheid</h2>
+            
+            <div class="section">
+                <h3 class="section-title">🎯 Leerdoelen</h3>
+                <ul>
+                    <li>Feedback gebruiken om professioneel te groeien</li>
+                    <li>Leren samenwerken binnen een securityproject</li>
+                    <li>Constructieve feedback geven en ontvangen</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>🧠 Uitleg</h4>
+                <p>Binnen cybersecurity werk je vaak in teams — zoals tijdens een penetration test of incident response. Feedback helpt je om beter te communiceren, veilig te werken en continu te leren.</p>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">📊 Drie feedbackniveaus</h3>
+                <ul>
+                    <li><strong>Feed-up</strong> – Wat wil ik bereiken?</li>
+                    <li><strong>Feedback</strong> – Waar sta ik nu?</li>
+                    <li><strong>Feed-forward</strong> – Wat ga ik verbeteren?</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>💬 Praktijkvoorbeeld</h4>
+                <p>Een teamlid merkt dat jij gevoelige data in een testlog hebt laten staan. In plaats van kritiek, zegt hij:</p>
+                <p><em>"Volgende keer kunnen we logbestanden anonimiseren voor we ze delen. Zo beschermen we privacy beter."</em></p>
+                <p><strong>Dat is feed-forward: gericht op leren, niet op schuld.</strong></p>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🔗 Bronnen</h3>
+                <div class="link-card">
+                    <a href="#">Hattie & Timperley (2007) – The Power of Feedback</a>
+                </div>
+                <div class="link-card">
+                    <a href="#">Feedbackcultuur HR</a>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showTab('les2', event)">← Vorige</button>
+                <button class="nav-button" onclick="showTab('les4', event)">Volgende →</button>
+            </div>
+        </div>
+
+        <div id="les4" class="content-card">
+            <h2 class="lesson-title">🔒 Les 4 – Privacy, AVG en Data Protection</h2>
+            
+            <div class="section">
+                <h3 class="section-title">🎯 Leerdoelen</h3>
+                <ul>
+                    <li>Inzicht in AVG (GDPR) en privacyprincipes</li>
+                    <li>Herkennen van persoonsgegevens</li>
+                    <li>Leren hoe je veilig met data omgaat</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>📘 Uitleg</h4>
+                <p>De AVG (GDPR) is de Europese wet die bepaalt hoe organisaties met persoonsgegevens moeten omgaan. Voor jou als Information Security-student betekent dit dat je:</p>
+                <ul>
+                    <li>Altijd toestemming nodig hebt om data te gebruiken</li>
+                    <li>Alleen data verwerkt die je echt nodig hebt</li>
+                    <li>Gegevens veilig bewaart en verwijdert</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Wat zijn persoonsgegevens?</h4>
+                <p>Informatie waarmee iemand direct of indirect identificeerbaar is:</p>
+                <ul>
+                    <li>Naam, adres, BSN</li>
+                    <li>IP-adres, inlognaam</li>
+                    <li>Gezondheidsinformatie</li>
+                    <li>Locatie of camera-opnames</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🚨 Bij een datalek</h3>
+                <p><strong>Definitie:</strong> Onbedoelde toegang, wijziging of verlies van persoonsgegevens.</p>
+                <p><strong>Voorbeelden:</strong> verkeerde e-mail, gestolen laptop, verkeerde toegang tot bestanden.</p>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🔗 Bronnen</h3>
+                <div class="link-card">
+                    <a href="https://autoriteitpersoonsgegevens.nl" target="_blank">Autoriteit Persoonsgegevens</a>
+                </div>
+                <div class="link-card">
+                    <a href="#">AVG-wetgeving (EU)</a>
+                </div>
+                <div class="link-card">
+                    <a href="#">Privacybeleid HR</a>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showTab('les3', event)">← Vorige</button>
+                <button class="nav-button" onclick="showTab('les5', event)">Volgende →</button>
+            </div>
+        </div>
+
+        <div id="les5" class="content-card">
+            <h2 class="lesson-title">🧩 Les 5 – NIS2, GDPR & Cyber Awareness</h2>
+            
+            <div class="section">
+                <h3 class="section-title">🎯 Leerdoelen</h3>
+                <ul>
+                    <li>Weten wat NIS2 betekent voor organisaties</li>
+                    <li>Inzicht in GDPR en het verschil met NIS2</li>
+                    <li>Bewustzijn van jouw rol in cybersecurity</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>💡 Uitleg</h4>
+                <p>De GDPR richt zich op privacy en persoonsgegevens, terwijl NIS2 zich richt op beveiliging van netwerken en systemen.</p>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">📋 NIS2 verplichtingen</h3>
+                <p>NIS2 verplicht organisaties tot:</p>
+                <ul>
+                    <li>Risicoanalyse en beveiligingsmaatregelen</li>
+                    <li>Meldplicht bij cyberincidenten</li>
+                    <li>Aansprakelijkheid van bestuurders</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>🔍 Het verschil</h4>
+                <p>Als securityprofessional moet jij beide kennen, want ze vullen elkaar aan:</p>
+                <ul>
+                    <li><strong>GDPR</strong> → bescherming van data</li>
+                    <li><strong>NIS2</strong> → bescherming van infrastructuur</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">🧮 CRAAP-check bij Security-informatie</h3>
+                <p>Gebruik deze toets bij bronnen over dreigingen of wetgeving:</p>
+                <ul>
+                    <li>Actueel? (bijv. na 2023 → NIS2-update)</li>
+                    <li>Relevantie? (gaat het over jouw sector?)</li>
+                    <li>Betrouwbaarheid? (NCSC, ENISA, overheidsbron)</li>
+                    <li>Juistheid? (controleer cijfers)</li>
+                    <li>Doel? (informeren of commercieel?)</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>📊 Opdracht</h4>
+                <p>Maak in groepjes een mini-presentatie van 3 minuten:</p>
+                <ul>
+                    <li>Thema: NIS2 of GDPR</li>
+                    <li>1 slide met uitleg</li>
+                    <li>1 praktijkvoorbeeld</li>
+                    <li>1 quizvraag</li>
+                </ul>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showTab('les4', event)">← Vorige</button>
+                <button class="nav-button" onclick="showTab('quiz', event)">Quiz →</button>
+            </div>
+        </div>
+
+        <div id="quiz" class="content-card">
+            <h2 class="lesson-title">🧠 Quiz – Test je kennis</h2>
+            <div class="score-display" id="scoreDisplay" style="display: none;">
+                Score: <span id="score">0</span>/10
+            </div>
+            <div class="quiz-progress" style="margin:15px 0; height:20px; background:#e0e0e0; border-radius:10px; overflow:hidden;">
+                <div id="progressBar" style="width:0%; height:100%; background:linear-gradient(90deg, #667eea 0%, #764ba2 100%); transition:width 0.3s;"></div>
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button class="nav-button" onclick="resetQuiz()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    🔄 Opnieuw Quiz
+                </button>
+            </div>
+            <div class="quiz-container" id="quizContainer"></div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showTab('les5', event)">← Vorige</button>
+                <button class="nav-button" onclick="showTab('intro', event)">Terug naar start</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding:30px 20px; color:white; margin-top: 40px; background: rgba(0,0,0,0.1); border-radius: 20px;">
+        <div style="margin-bottom: 15px;">
+            <strong style="font-size: 1.2em;">Information Security Onboarding</strong>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Student:</strong> Diyar Jamo | <strong>Opleiding:</strong> Information Security
+        </div>
+        <div style="margin-bottom: 10px; font-size: 0.95em; opacity: 0.9;">
+            Interactieve onboarding webapp met uitleg over vijf lessen en quiz
+        </div>
+        <div style="margin-bottom: 10px; font-size: 0.9em; opacity: 0.85;">
+            <strong>Technologie:</strong> HTML, CSS, JavaScript
+        </div>
+        <div style="font-size: 0.9em; opacity: 0.85;">
+            <strong>Doel:</strong> Studenten helpen bij informatievaardigheden, privacy en NIS2/GDPR
+        </div>
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
+            © 2025 – Rotterdam Academy
+        </div>
+    </footer>
+
+    <script>
+        const questionPool = [
+            { question: "Welke methode beoordeel je bronbetrouwbaarheid mee?", options: ["SMART-model", "CRAAP-model", "SWOT-analyse", "PEST-analyse"], correct: 1, explanation: "Controleert actualiteit, relevantie, autoriteit, juistheid en doel." },
+            { question: "Wat hoort niet bij APA-vermelding?", options: ["Auteur", "Zoekwoorden", "Jaar", "Titel"], correct: 1, explanation: "APA bevat auteur, jaar en titel, maar geen zoektermen." },
+            { question: "Waar vind je roosterinfo?", options: ["Brightspace", "Hint.hr.nl", "MijnHR-app", "Mediatheek"], correct: 1, explanation: "Hint is het centrale HR-platform voor rooster en reglement." },
+            { question: "Wat doe je als je cijfer onterecht is?", options: ["Direct klagen", "Toetsinzage aanvragen", "Negeren", "Social media post"], correct: 1, explanation: "Je mag altijd inzage vragen bij de examencommissie." },
+            { question: "Wat is feed-forward?", options: ["Kritiek geven", "Vooruitkijkende feedback", "Resultaat bekijken", "Doelen stellen"], correct: 1, explanation: "Gericht op verbetering bij volgende taken." },
+            { question: "Feedback op zelfregulatie richt zich op?", options: ["De taak", "Het proces", "Eigen leerproces", "De docent"], correct: 2, explanation: "Zelfmonitoring en verantwoordelijkheid nemen." },
+            { question: "Wat is een persoonsgegeven?", options: ["Alleen naam en adres", "Herleidbare info tot persoon", "Alleen BSN", "Alleen foto's"], correct: 1, explanation: "Ook IP-adres of foto valt hieronder." },
+            { question: "Wat is een datalek?", options: ["Geplande update", "Onbedoeld delen van gegevens", "Back-up maken", "Inloggen"], correct: 1, explanation: "Bijv. verkeerde mail of gestolen laptop." },
+            { question: "Wat is het doel van GDPR?", options: ["Netwerken beveiligen", "Beschermen van persoonsgegevens", "Software updaten", "Websites maken"], correct: 1, explanation: "Europese privacywet." },
+            { question: "Wat regelt NIS2?", options: ["Privacy", "Netwerk- en systeembeveiliging", "Auteursrecht", "Marketing"], correct: 1, explanation: "Richtlijn voor digitale infrastructuur." },
+            { question: "Welke van deze is geen security risico?", options: ["Phishing", "Malware", "VPN gebruik", "Datalek"], correct: 2, explanation: "VPN gebruik verhoogt juist de veiligheid." },
+            { question: "Wat is MFA?", options: ["Multi-Factor Authentication", "Mega File Access", "Medium File Analysis", "Multi File Admin"], correct: 0, explanation: "Extra beveiliging door meerdere verificaties." },
+            { question: "Wat hoort bij veilige wachtwoorden?", options: ["123456", "NaamHond", "Lange mix van letters, cijfers, symbolen", "Qwerty"], correct: 2, explanation: "Gebruik complex en uniek wachtwoord." },
+            { question: "Wat moet je doen bij verdachte e-mail?", options: ["Openen", "Doorklikken", "Melden bij security", "Verwijderen"], correct: 2, explanation: "Melden voorkomt incidenten." },
+            { question: "Welke data valt onder GDPR?", options: ["Publieke data", "Persoonsgegevens", "Niet-identificeerbare data", "Website content"], correct: 1, explanation: "Alle gegevens waarmee iemand identificeerbaar is." },
+            { question: "Wat is social engineering?", options: ["Technisch hacken", "Menselijk misleiden", "Software installeren", "Firewalls configureren"], correct: 1, explanation: "Misleiding van mensen om toegang te krijgen." },
+            { question: "Wat is encryptie?", options: ["Versleuteling van data", "Back-up maken", "Software updaten", "Firewall instellen"], correct: 0, explanation: "Data wordt onleesbaar gemaakt voor onbevoegden." },
+            { question: "Wat is phishing?", options: ["Nep e-mail of site", "Software update", "VPN", "Firewall"], correct: 0, explanation: "Misleidende berichten om gegevens te stelen." },
+            { question: "Wat is NIS2 vooral gericht op?", options: ["Data privacy", "Netwerk & systeembeveiliging", "Marketing", "HR-processen"], correct: 1, explanation: "Bescherming van kritieke infrastructuur." },
+            { question: "Wat betekent GDPR?", options: ["General Data Protection Regulation", "Global Data Privacy Rule", "General Digital Privacy Regulation", "Global Data Protection Rule"], correct: 0, explanation: "Europese privacywetgeving." }
+        ];
+
+        let quizData = [];
+        let userAnswers = {};
+        let quizRendered = false;
+        let usedQuestions = [];
+
+        // IN-MEMORY versie (werkt in Claude.ai)
+        function getRandomQuestionsForStudent(pool, numQuestions) {
+            // Filter uit pool alleen vragen die nog niet gebruikt zijn
+            let remainingQuestions = pool.filter((_, index) => !usedQuestions.includes(index));
+            
+            // Als er niet genoeg over zijn, reset
+            if (remainingQuestions.length < numQuestions) {
+                usedQuestions = [];
+                remainingQuestions = pool;
+            }
+            
+            // Kies random vragen uit remainingQuestions
+            const shuffled = [...remainingQuestions].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, numQuestions);
+            
+            // Sla de indices op van de gekozen vragen
+            selected.forEach(q => {
+                const qIndex = pool.indexOf(q);
+                if (!usedQuestions.includes(qIndex)) usedQuestions.push(qIndex);
+            });
+            
+            return selected;
+        }
+
+        // LOCALSTORAGE versie (ALLEEN voor eigen omgeving - NIET in Claude.ai!)
+        // Uncomment onderstaande functie en comment de bovenstaande functie uit
+        // als je de code in je eigen omgeving gebruikt waar localStorage wel werkt
+        /*
+        function getRandomQuestionsForStudent(pool, numQuestions) {
+            // Haal gebruikte vragen op uit localStorage
+            let usedQuestions = JSON.parse(localStorage.getItem('usedQuestions') || '[]');
+            // Filter uit pool alleen vragen die nog niet gebruikt zijn
+            let remainingQuestions = pool.filter((_, index) => !usedQuestions.includes(index));
+            // Als er niet genoeg over zijn, reset
+            if (remainingQuestions.length < numQuestions) {
+                usedQuestions = [];
+                remainingQuestions = pool;
+            }
+            // Kies random vragen uit remainingQuestions
+            const shuffled = [...remainingQuestions].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, numQuestions);
+            // Sla de indices op van de gekozen vragen
+            selected.forEach(q => {
+                const qIndex = pool.indexOf(q);
+                if (!usedQuestions.includes(qIndex)) usedQuestions.push(qIndex);
+            });
+            localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
+            return selected;
+        }
+        */
+
+        function showTab(tabName, event) {
+            const tabs = document.querySelectorAll('.content-card');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            if (event) event.currentTarget.classList.add('active');
+            
+            if (tabName === 'quiz' && !quizRendered) {
+                renderQuiz();
+                quizRendered = true;
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderQuiz() {
+            userAnswers = {};
+            quizData = getRandomQuestionsForStudent(questionPool, 10);
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            
+            quizData.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                questionDiv.innerHTML = `
+                    <span class="question-number">Vraag ${index + 1}</span>
+                    <h3>${q.question}</h3>
+                    <div class="quiz-options" id="options-${index}">
+                        ${q.options.map((option, optIndex) => `
+                            <div class="quiz-option" role="button" aria-label="Antwoord optie" tabindex="0" onclick="selectAnswer(${index}, ${optIndex})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="explanation-${index}">
+                        <strong>✓ Correct!</strong><br>${q.explanation}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+            
+            document.getElementById('scoreDisplay').style.display = 'none';
+            document.getElementById('progressBar').style.width = '0%';
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            if (userAnswers[questionIndex] !== undefined) {
+                return;
+            }
+            
+            userAnswers[questionIndex] = optionIndex;
+            
+            const optionsContainer = document.getElementById(`options-${questionIndex}`);
+            const options = optionsContainer.querySelectorAll('.quiz-option');
+            const correctIndex = quizData[questionIndex].correct;
+            
+            options.forEach((option, idx) => {
+                option.style.pointerEvents = 'none';
+                if (idx === correctIndex) {
+                    option.classList.add('correct');
+                } else if (idx === optionIndex && optionIndex !== correctIndex) {
+                    option.classList.add('wrong');
+                }
+            });
+            
+            document.getElementById(`explanation-${questionIndex}`).classList.add('show');
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            let correct = 0;
+            const totalAnswered = Object.keys(userAnswers).length;
+            
+            Object.keys(userAnswers).forEach(qIndex => {
+                if (userAnswers[qIndex] === quizData[qIndex].correct) {
+                    correct++;
+                }
+            });
+            
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreSpan = document.getElementById('score');
+            const progressBar = document.getElementById('progressBar');
+            
+            scoreSpan.textContent = correct;
+            scoreDisplay.style.display = 'block';
+            
+            const progressPercentage = (totalAnswered / quizData.length) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        }
+
+        function resetQuiz() {
+            renderQuiz();
+            window.scrollTo({ top: document.getElementById('quiz').offsetTop - 100, behavior: 'smooth' });
+        }
+    </script>
